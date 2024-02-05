@@ -1,0 +1,35 @@
+import os
+import random
+import pygame
+from pygame.locals import QUIT
+
+def create_puzzle(folder_path):
+    pygame.init()
+
+    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("Artwork Puzzle")
+
+    images = [f for f in os.listdir(folder_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
+    selected_image = random.choice(images)
+
+    img_path = os.path.join(folder_path, selected_image)
+    img = pygame.image.load(img_path)
+
+    puzzle_pieces = []
+
+    for _ in range(9):
+        x, y = random.randint(0, 700), random.randint(0, 500)
+        piece = img.subsurface((x, y, 100, 100))  # Adjust dimensions as needed
+        puzzle_pieces.append((piece, (x, y)))
+
+    for piece, (x, y) in puzzle_pieces:
+        screen.blit(piece, (x, y))
+
+    pygame.display.flip()
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+
+# Example usage:
+create_puzzle("path/to/kids_artwork_folder")
